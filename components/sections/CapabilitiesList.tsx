@@ -33,7 +33,11 @@ export default function CapabilitiesList({ showDescription = false }: { showDesc
                 spotlightColor="rgba(201, 138, 62, 0.28)"
               >
                 <div className="cap-row">
-                  <span className="cnum">{cap.number}</span>
+                  <div className="cap-header-mobile">
+                    <span className="cnum">{cap.number}</span>
+                    <h3 className="mobile-title">{cap.title}</h3>
+                    <span className="mobile-arrow" aria-hidden="true">→</span>
+                  </div>
 
                   {cap.image && (
                     <div className="cap-thumb">
@@ -43,11 +47,11 @@ export default function CapabilitiesList({ showDescription = false }: { showDesc
                   )}
 
                   <div className="cap-content">
-                    <h3>{cap.title}</h3>
+                    <h3 className="desktop-title">{cap.title}</h3>
                     <p>{showDescription ? cap.description : cap.summary}</p>
                   </div>
 
-                  <span className="arrow" aria-hidden="true">
+                  <span className="arrow desktop-arrow" aria-hidden="true">
                     →
                   </span>
                 </div>
@@ -70,8 +74,9 @@ export default function CapabilitiesList({ showDescription = false }: { showDesc
         :global(.cap-card) {
           background: var(--white);
           border: 1px solid var(--line-dark);
-          border-radius: 4px;
+          border-radius: 6px;
           transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+          overflow: hidden;
         }
         :global(.cap-card:hover) {
           transform: translateY(-2px);
@@ -80,12 +85,15 @@ export default function CapabilitiesList({ showDescription = false }: { showDesc
         }
         .cap-row {
           display: grid;
-          grid-template-columns: 60px 140px 1.4fr 50px;
+          grid-template-columns: 50px 160px 1fr 40px;
           align-items: center;
           gap: 28px;
-          padding: 24px 28px;
+          padding: 22px 28px;
           position: relative;
           z-index: 1;
+        }
+        .cap-header-mobile {
+          display: none;
         }
         .cnum {
           font-family: var(--font-space-grotesk), sans-serif;
@@ -94,18 +102,20 @@ export default function CapabilitiesList({ showDescription = false }: { showDesc
           font-weight: 700;
         }
         .cap-thumb {
-          width: 140px;
-          height: 85px;
-          border-radius: 3px;
+          width: 160px;
+          height: 100px;
+          border-radius: 4px;
           overflow: hidden;
           position: relative;
           background: var(--navy);
           border: 1px solid rgba(0, 0, 0, 0.08);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         .cap-thumb img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          display: block;
           transition: transform 0.5s ease;
         }
         :global(.cap-card:hover) .cap-thumb img {
@@ -114,15 +124,15 @@ export default function CapabilitiesList({ showDescription = false }: { showDesc
         .thumb-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, transparent 40%, rgba(10, 20, 32, 0.4) 100%);
+          background: linear-gradient(180deg, transparent 40%, rgba(10, 20, 32, 0.35) 100%);
         }
-        .cap-content h3 {
+        .desktop-title {
           font-size: 21px;
           color: var(--navy);
           margin-bottom: 6px;
           transition: color 0.3s ease;
         }
-        :global(.cap-card:hover) .cap-content h3 {
+        :global(.cap-card:hover) .desktop-title {
           color: #a86c26;
         }
         .cap-content p {
@@ -130,41 +140,64 @@ export default function CapabilitiesList({ showDescription = false }: { showDesc
           font-size: 14.5px;
           line-height: 1.6;
         }
-        .arrow {
+        .desktop-arrow {
           justify-self: end;
           font-size: 22px;
           color: var(--navy);
           transition: transform 0.3s ease, color 0.3s ease;
         }
-        :global(.cap-card:hover) .arrow {
+        :global(.cap-card:hover) .desktop-arrow {
           transform: translateX(8px);
           color: var(--accent);
         }
-        @media (max-width: 1024px) {
+
+        /* Responsive Mobile & Tablet Layout */
+        @media (max-width: 860px) {
           .cap-row {
-            grid-template-columns: 50px 1fr 40px;
-            grid-template-areas:
-              "n t a"
-              "img d d";
-            row-gap: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 14px;
+            padding: 20px 18px;
           }
           .cnum {
-            grid-area: n;
+            display: none;
           }
-          .cap-content h3 {
-            grid-area: t;
-            margin-bottom: 0;
+          .desktop-title,
+          .desktop-arrow {
+            display: none;
           }
-          .arrow {
-            grid-area: a;
+          .cap-header-mobile {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+          }
+          .cap-header-mobile .cnum {
+            display: inline-block;
+            font-size: 14px;
+          }
+          .mobile-title {
+            font-size: 18px;
+            color: var(--navy);
+            flex-grow: 1;
+            margin: 0;
+            font-weight: 600;
+          }
+          .mobile-arrow {
+            font-size: 20px;
+            color: var(--accent);
           }
           .cap-thumb {
-            grid-area: img;
             width: 100%;
-            height: 120px;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            max-height: 220px;
           }
           .cap-content p {
-            grid-area: d;
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--slate);
           }
         }
       `}</style>
