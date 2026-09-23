@@ -10,7 +10,6 @@ const paths = [
   "/metal-fabrication",
   "/restaurants",
   "/projects",
-  "/gallery",
   "/contact",
   "/request-a-quote"
 ];
